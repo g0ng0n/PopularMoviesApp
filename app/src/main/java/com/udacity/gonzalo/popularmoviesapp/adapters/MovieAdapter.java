@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso;
 import com.udacity.gonzalo.popularmoviesapp.R;
 import com.udacity.gonzalo.popularmoviesapp.ViewHolders.MovieHolder;
 import com.udacity.gonzalo.popularmoviesapp.model.Movie;
+import com.udacity.gonzalo.popularmoviesapp.utils.MovieJsonWrapper;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder>{
 
         LayoutInflater layoutInflater=LayoutInflater.from(parent.getContext());
 
-        View view = layoutInflater.inflate(R.layout.list_item_crime,
+        View view = layoutInflater.inflate(R.layout.activity_movie_list,
                 parent,false);
 
 
@@ -39,22 +40,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder>{
     }
 
     @Override
-    public void onBindViewHolder(MovieAdapter holder, int position){
+    public void onBindViewHolder(MovieHolder holder, int position){
         Movie movie = mMoviesList.get(position);
 
         //Download image using picasso library
-        Picasso.with(mContext).load(movie.getPosterPath())
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(customViewHolder.imageView);
+        Picasso.with(mContext).load(MovieJsonWrapper.getPosterUrl(movie.getPosterPath()))
+                .into(holder.mImageView);
 
-
-        holder.bindCrime(crime);
     }
 
     @Override
     public int getItemCount(){
-        return mCrimes.size();
+        return mMoviesList.size();
     }
 
     public List<Movie> getmMoviesList() {

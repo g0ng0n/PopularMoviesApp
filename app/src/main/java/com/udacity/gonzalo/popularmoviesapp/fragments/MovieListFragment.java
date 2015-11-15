@@ -16,6 +16,7 @@ import com.udacity.gonzalo.popularmoviesapp.model.Movie;
 import com.udacity.gonzalo.popularmoviesapp.utils.FetchMoviesAsyncResponse;
 import com.udacity.gonzalo.popularmoviesapp.utils.FetchMoviesTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,11 +40,11 @@ public class MovieListFragment extends Fragment implements FetchMoviesAsyncRespo
 
         mMoviesListRecyclerView = (RecyclerView) view.findViewById(R.id.movies_list_recycler_view);
 
-        mMoviesListRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        mMoviesListRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 
         updateUI();
 
-        return view;
+        return mMoviesListRecyclerView;
     }
 
     @Override
@@ -58,7 +59,8 @@ public class MovieListFragment extends Fragment implements FetchMoviesAsyncRespo
     private void updateUI() {
 // TODO add the asyncTask to call the movieDB
         // List<Movie> crimes = asynctask
-        List<Movie> moviesList = fetcher.execute("94043");
+        List<Movie> moviesList = new ArrayList<Movie>();
+        fetcher.execute();
 
         if (mAdapter == null) {
             mAdapter = new MovieAdapter(moviesList, getActivity());
@@ -71,13 +73,14 @@ public class MovieListFragment extends Fragment implements FetchMoviesAsyncRespo
     }
 
 
-
+    /**
+     *
+     * @param output
+     * This method has been created for logging purpose
+     * is a post Processor for the asyncTask.
+     *
+     */
     public void processFinish(List<Movie> output) {
-        if (output != null) {
-            mAdapter.getmMoviesList().clear();
-            for (String dayForecastStr : output) {
-                mAdapter.add(dayForecastStr);
-            }
-        }
+
     }
 }

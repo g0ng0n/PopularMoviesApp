@@ -31,25 +31,19 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        String format = "json";
-        String units = "metric";
-        int numDays =7;
+        String popularity = "popularity.desc";
         String apiKey="";
         // Will contain the raw JSON response as a string.
-        String forecastJsonStr = null;
+        String moviesJsonStr = null;
 
         try {
-            final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+            final String MOVIEAPI_BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
             final String QUERY_PARAM = "q";
-            final String FORMAT_PARAM = "mode";
-            final String UNITS_PARAM = "units";
-            final String DAYS_PARAM = "cnt";
-            final String APIKEY_PARAM = "APPID";
+            final String SORT_BY = "sort_by";
+            final String APIKEY_PARAM = "api_key";
 
-            Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon().appendQueryParameter(QUERY_PARAM, params[0])
-                    .appendQueryParameter(FORMAT_PARAM, format)
-                    .appendQueryParameter(UNITS_PARAM, units)
-                    .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+            Uri builtUri = Uri.parse(MOVIEAPI_BASE_URL).buildUpon().appendQueryParameter(QUERY_PARAM, params[0])
+                    .appendQueryParameter(SORT_BY, popularity)
                     .appendQueryParameter(APIKEY_PARAM, apiKey).build();
 
             // Construct the URL for the OpenWeatherMap query
@@ -68,7 +62,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
                 // Nothing to do.
-                //forecastJsonStr = null;
+                //moviesJsonStr = null;
                 return null;
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -83,22 +77,23 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
             if (buffer.length() == 0) {
                 // Stream was empty.  No point in parsing.
-                //forecastJsonStr = null;
+                //moviesJsonStr = null;
                 return null;
 
             }
 
 
-            Log.v(LOG_TAG, "Forecast JSON String:" + forecastJsonStr);
+            Log.v(LOG_TAG, "Movies JSON String:" + moviesJsonStr);
+            moviesJsonStr = buffer.toString();
 
+            List<Movie> movies = MovieJsonWrapper.getMoviesDataFromJson(moviesJsonStr);
+            return movies;
 
-            forecastJsonStr = buffer.toString();
-            return null;
         }catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
-            //forecastJsonStr = null;
+            //moviesJsonStr = null;
             return null;
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Error ", e);
