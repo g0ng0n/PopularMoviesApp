@@ -1,15 +1,16 @@
 package com.udacity.gonzalo.popularmoviesapp.model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Created by g0ng0n on 11/15/15.
  */
-public class Movie {
+public class Movie implements Serializable {
 
     private Boolean adult;
     private String backdropPath;
-    private UUID id;
+    private String id;
     private String originalLanguage;
     private String originalTitle;
     private String overview;
@@ -20,7 +21,7 @@ public class Movie {
     private String voteAverage;
     private String voteCount;
 
-    public Movie(Boolean adult, String backdropPath, UUID id, String originalLanguage, String originalTitle, String overview, String releaseDate, String posterPath, String popularity, String title, String voteAverage, String voteCount) {
+    public Movie(Boolean adult, String backdropPath, String id, String originalLanguage, String originalTitle, String overview, String releaseDate, String posterPath, String popularity, String title, String voteAverage, String voteCount) {
         this.adult = adult;
         this.backdropPath = backdropPath;
         this.id = id;
@@ -51,11 +52,11 @@ public class Movie {
         this.backdropPath = backdropPath;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

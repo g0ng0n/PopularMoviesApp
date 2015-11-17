@@ -32,7 +32,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder>{
 
         LayoutInflater layoutInflater=LayoutInflater.from(parent.getContext());
 
-        View view = layoutInflater.inflate(R.layout.activity_movie_list,
+        View view = layoutInflater.inflate(R.layout.content_movie_list,
                 parent,false);
 
 
@@ -47,6 +47,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieHolder>{
         Picasso.with(mContext).load(MovieJsonWrapper.getPosterUrl(movie.getPosterPath()))
                 .into(holder.mImageView);
 
+        holder.bindMovie(movie);
     }
 
     @Override

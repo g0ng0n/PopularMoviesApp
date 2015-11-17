@@ -31,19 +31,18 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        String popularity = "popularity.desc";
+        String popularity = params[0];
         String apiKey="";
         // Will contain the raw JSON response as a string.
         String moviesJsonStr = null;
-
+        List<Movie> movies = null;
         try {
             final String MOVIEAPI_BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
             final String QUERY_PARAM = "q";
             final String SORT_BY = "sort_by";
             final String APIKEY_PARAM = "api_key";
 
-            Uri builtUri = Uri.parse(MOVIEAPI_BASE_URL).buildUpon().appendQueryParameter(QUERY_PARAM, params[0])
-                    .appendQueryParameter(SORT_BY, popularity)
+            Uri builtUri = Uri.parse(MOVIEAPI_BASE_URL).buildUpon().appendQueryParameter(SORT_BY, popularity)
                     .appendQueryParameter(APIKEY_PARAM, apiKey).build();
 
             // Construct the URL for the OpenWeatherMap query
@@ -83,11 +82,10 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             }
 
 
-            Log.v(LOG_TAG, "Movies JSON String:" + moviesJsonStr);
             moviesJsonStr = buffer.toString();
 
-            List<Movie> movies = MovieJsonWrapper.getMoviesDataFromJson(moviesJsonStr);
-            return movies;
+            movies = MovieJsonWrapper.getMoviesDataFromJson(moviesJsonStr);
+            Log.v(LOG_TAG, "Movies JSON String:" + moviesJsonStr);
 
         }catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
@@ -100,6 +98,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         } finally{
             if (urlConnection != null) {
                 urlConnection.disconnect();
+
             }
             if (reader != null) {
                 try {
@@ -109,12 +108,13 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
                 }
             }
         }
-        return null;
+        return movies;
+
     }
 
 
     @Override
     protected void onPostExecute(List<Movie> movies) {
-        delegate.processFinish(movies);
+       delegate.processFinish(movies);
     }
 }

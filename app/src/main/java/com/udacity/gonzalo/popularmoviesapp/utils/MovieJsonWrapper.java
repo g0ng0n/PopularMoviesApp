@@ -16,8 +16,8 @@ import java.util.UUID;
 public class MovieJsonWrapper {
 
     private static final String LOG_TAG = MovieJsonWrapper.class.getSimpleName();
-    private static final String NODE_RESULTS = "result";
-    private static final String ADULTS_NODE = "adults";
+    private static final String NODE_RESULTS = "results";
+    private static final String ADULTS_NODE = "adult";
     private static final String BACKDROP_PATH_NODE = "backdrop_path";
     private static final String ID_NODE = "id";
     private static final String ORIGINAL_LANGUAGE_NODE = "original_language";
@@ -29,7 +29,7 @@ public class MovieJsonWrapper {
     private static final String TITLE_NODE = "title";
     private static final String VOTE_AVERAGE_NODE = "vote_average";
     private static final String VOTE_COUNT_NODE = "vote_count";
-    private static final String URL_POSTER = "http://image.tmdb.org/t/p/w185/";
+    private static final String URL_POSTER = "http://image.tmdb.org/t/p/w342/";
     /**
      * Take the String representing the complete forecast in JSON Format and
      * pull out the data we need to construct the Strings needed for the wireframes.
@@ -52,7 +52,7 @@ public class MovieJsonWrapper {
             Movie newMovie = new Movie(
                     Boolean.valueOf(jsonMovieNode.getString(ADULTS_NODE)),
                     jsonMovieNode.getString(BACKDROP_PATH_NODE),
-                    UUID.fromString(jsonMovieNode.getString(ID_NODE)),
+                    jsonMovieNode.getString(ID_NODE),
                     jsonMovieNode.getString(ORIGINAL_LANGUAGE_NODE),
                     jsonMovieNode.getString(ORIGINAL_TITLE_NODE),
                     jsonMovieNode.getString(OVERVIEW_NODE),
@@ -73,7 +73,7 @@ public class MovieJsonWrapper {
     public static String getPosterUrl(String posterPath) {
 
         StringBuilder url = new StringBuilder();
-        url.append(URL_POSTER).append(posterPath).append(".jpg");
+        url.append(URL_POSTER).append(posterPath);
 
         return url.toString();
 
