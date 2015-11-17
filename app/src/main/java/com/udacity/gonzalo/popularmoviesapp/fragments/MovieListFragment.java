@@ -1,6 +1,9 @@
 package com.udacity.gonzalo.popularmoviesapp.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -22,6 +25,7 @@ import com.udacity.gonzalo.popularmoviesapp.adapters.MovieAdapter;
 import com.udacity.gonzalo.popularmoviesapp.model.Movie;
 import com.udacity.gonzalo.popularmoviesapp.utils.FetchMoviesAsyncResponse;
 import com.udacity.gonzalo.popularmoviesapp.utils.FetchMoviesTask;
+import com.udacity.gonzalo.popularmoviesapp.utils.MoviesUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,14 +54,15 @@ public class MovieListFragment extends Fragment implements FetchMoviesAsyncRespo
         mMoviesListRecyclerView = (RecyclerView) inflater.inflate(R.layout.activity_movie_list, container, false);
 
         mMoviesListRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
-        fetcher.execute("popularity.desc");
-
+        //we check to see if we have network connection
+        if (MoviesUtils.isOnline(getContext())) {
+            fetcher.execute("popularity.desc");
+        }
         return mMoviesListRecyclerView;
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
     }
 
@@ -66,15 +71,16 @@ public class MovieListFragment extends Fragment implements FetchMoviesAsyncRespo
         super.onCreate(savedInstanceState);
         fetcher = new FetchMoviesTask();
         fetcher.delegate = this;
-        if(savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
+
+        if (savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
             moviesList = new ArrayList<Movie>();
-        }
-        else {
+        } else {
             moviesList = savedInstanceState.getParcelableArrayList("movies");
         }
         setHasOptionsMenu(true);
 
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("movies", (ArrayList<? extends Parcelable>) moviesList);
@@ -83,35 +89,38 @@ public class MovieListFragment extends Fragment implements FetchMoviesAsyncRespo
 
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_movie_list, menu);
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.menu_item_sort_by_pop:
-                fetcher = new FetchMoviesTask();
-                fetcher.delegate = this;
-                fetcher.execute("popularity.desc");
+                if (MoviesUtils.isOnline(getContext())) {
+
+                    fetcher = new FetchMoviesTask();
+                    fetcher.delegate = this;
+                    fetcher.execute("popularity.desc");
+                }
                 return true;
             case R.id.menu_item_sort_by_release:
-                fetcher = new FetchMoviesTask();
-                fetcher.delegate = this;
-                fetcher.execute("vote_count.desc");
+                if (MoviesUtils.isOnline(getContext())) {
+                    fetcher = new FetchMoviesTask();
+                    fetcher.delegate = this;
+                    fetcher.execute("vote_count.desc");
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
     /**
-     *
-     * @param output
-     * This method has been created for logging purpose
-     * is a post Processor for the asyncTask.
-     *
+     * @param output This method has been created for logging purpose
+     *               is a post Processor for the asyncTask.
      */
     public void processFinish(List<Movie> output) {
         Log.v(LOG_TAG, "Movies JSON String:" + output);
