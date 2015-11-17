@@ -20,7 +20,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public static Intent newIntent(Context packageContext, Movie movie) {
 
         Intent intent = new Intent(packageContext, MovieDetailsActivity.class);
-        intent.putExtra(ARG_MOVIE_ID, movie);
+
+        Bundle mBundle = new Bundle();
+        mBundle.putParcelable(ARG_MOVIE_ID, movie);
+        intent.putExtras(mBundle);
 
         return intent;
     }

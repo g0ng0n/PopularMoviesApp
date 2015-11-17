@@ -17,6 +17,8 @@ import com.udacity.gonzalo.popularmoviesapp.utils.MovieJsonWrapper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 /**
@@ -50,8 +52,7 @@ public class MovieFragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
         if (intent != null) {
-            mMovie = (Movie) intent.getSerializableExtra("movie_object");
-
+            mMovie = (Movie) intent.getParcelableExtra("movie_object");
             getActivity().setTitle(mMovie.getTitle());
             Picasso.with(getActivity()).load(MovieJsonWrapper.getPosterUrl(mMovie.getPosterPath()))
                     .into((ImageView) rootView.findViewById(R.id.imageViewPoster));

@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/imageViewPoster"
         android:paddingTop="16dp"
+
         android:textSize="32sp"
         />
     <TextView

@@ -2,6 +2,7 @@ package com.udacity.gonzalo.popularmoviesapp.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,6 +24,7 @@ import com.udacity.gonzalo.popularmoviesapp.utils.FetchMoviesAsyncResponse;
 import com.udacity.gonzalo.popularmoviesapp.utils.FetchMoviesTask;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -64,10 +66,21 @@ public class MovieListFragment extends Fragment implements FetchMoviesAsyncRespo
         super.onCreate(savedInstanceState);
         fetcher = new FetchMoviesTask();
         fetcher.delegate = this;
-
+        if(savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
+            moviesList = new ArrayList<Movie>();
+        }
+        else {
+            moviesList = savedInstanceState.getParcelableArrayList("movies");
+        }
         setHasOptionsMenu(true);
 
     }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("movies", (ArrayList<? extends Parcelable>) moviesList);
+        super.onSaveInstanceState(outState);
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
