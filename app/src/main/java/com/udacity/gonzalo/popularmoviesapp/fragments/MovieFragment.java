@@ -15,11 +15,9 @@ import com.udacity.gonzalo.popularmoviesapp.R;
 import com.udacity.gonzalo.popularmoviesapp.model.Movie;
 import com.udacity.gonzalo.popularmoviesapp.utils.MovieJsonWrapper;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by g0ng0n on 11/16/15.
@@ -30,6 +28,7 @@ public class MovieFragment extends Fragment {
     private static final String LOG_TAG = MovieFragment.class.getSimpleName();
 
     private Movie mMovie;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +38,8 @@ public class MovieFragment extends Fragment {
     }
 
 
-    public MovieFragment() {    }
+    public MovieFragment() {
+    }
 
     @Nullable
     @Override
@@ -48,7 +48,6 @@ public class MovieFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
 
-        // The detail Activity called via intent.  Inspect the intent for forecast data.
         Intent intent = getActivity().getIntent();
         if (intent != null) {
             mMovie = (Movie) intent.getSerializableExtra("movie_object");
@@ -72,12 +71,12 @@ public class MovieFragment extends Fragment {
         return rootView;
     }
 
-    private String getYear(){
+    private String getYear() {
         Calendar calendar = Calendar.getInstance();
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MMM-dd");
             calendar.setTime(formatter.parse(mMovie.getReleaseDate()));
-        }catch (ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return String.valueOf(calendar.get(Calendar.YEAR));

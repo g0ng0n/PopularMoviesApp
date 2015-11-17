@@ -30,12 +30,10 @@ public class MovieJsonWrapper {
     private static final String VOTE_AVERAGE_NODE = "vote_average";
     private static final String VOTE_COUNT_NODE = "vote_count";
     private static final String URL_POSTER = "http://image.tmdb.org/t/p/w342/";
+
     /**
-     * Take the String representing the complete forecast in JSON Format and
-     * pull out the data we need to construct the Strings needed for the wireframes.
-     * <p/>
-     * Fortunately parsing is easy:  constructor takes the JSON string and converts it
-     * into an Object hierarchy for us.
+     * This methods provides the logic to parse all the json data into a Movie model class
+     * and then add that object into a List of Movies
      */
     public static List<Movie> getMoviesDataFromJson(String moviesJsonStr)
             throws JSONException {

@@ -24,6 +24,11 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
     public FetchMoviesAsyncResponse delegate = null;
     private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
 
+
+    /**
+     * This methods provides the logic to call the Movie API, I took part of the code from
+     * the Sunshine App.
+     */
     @Override
     protected List<Movie> doInBackground(String... params) {
 
@@ -32,7 +37,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String popularity = params[0];
-        String apiKey="";
+        String apiKey = "";
         // Will contain the raw JSON response as a string.
         String moviesJsonStr = null;
         List<Movie> movies = null;
@@ -87,7 +92,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             movies = MovieJsonWrapper.getMoviesDataFromJson(moviesJsonStr);
             Log.v(LOG_TAG, "Movies JSON String:" + moviesJsonStr);
 
-        }catch (IOException e) {
+        } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
@@ -95,7 +100,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
             return null;
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Error ", e);
-        } finally{
+        } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
 
@@ -115,6 +120,6 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
     @Override
     protected void onPostExecute(List<Movie> movies) {
-       delegate.processFinish(movies);
+        delegate.processFinish(movies);
     }
 }
